@@ -22,12 +22,17 @@ export const {
     bp3: '(min-width: 1200px)',
     bp4: '(min-width: 1800px)',
     bp5: '(max-width: 900px)',
-    motion: '(prefers-reduced-motion)',
-    hover: '(any-hover: hover)',
   },
   theme: {
     colors: {
-     
+    lighestGray: "#EEEEEE",
+    lightGray: "#8D8F9A",
+    mediumGray: "#D3D2D5",
+    darkGray: "#1D1F22",
+    lightGreen: "#5ECE7B",
+    darkGreen: "#0F6450",
+    mediumBlue: "#15A4C3",
+    orange: "#EA8120",
     },
 
     space: {
