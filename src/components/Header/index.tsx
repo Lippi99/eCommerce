@@ -3,6 +3,7 @@ import { Flex } from "../Flex";
 import NextLink from "next/link";
 import NextImage from "next/image";
 import { css } from "../../../stitches.config";
+import { useState } from "react";
 
 export const Header = () => {
   const header = css({
@@ -22,9 +23,20 @@ export const Header = () => {
           fontSize: "$3",
           textTransform: "uppercase",
         },
+        itemAnimation: {
+          color: "$lightGreen",
+          paddingBottom: "$2",
+          borderBottom: "1px solid $lightGreen",
+          textDecoration: "none",
+          fontSize: "$3",
+          textTransform: "uppercase",
+          transition: "all 500ms",
+        },
       },
     },
   });
+
+  const [linkText, setLinkText] = useState("Women");
 
   return (
     <Flex
@@ -38,17 +50,38 @@ export const Header = () => {
         <ul className={header({ variant: "list" })}>
           <li className={header({ variant: "item" })}>
             <NextLink href="/">
-              <a className={header({ variant: "link" })}>Women</a>
+              <a
+                onClick={() => setLinkText("Women")}
+                className={header({
+                  variant: `${linkText == "Women" ? "itemAnimation" : "link"}`,
+                })}
+              >
+                Women
+              </a>
             </NextLink>
           </li>
           <li className={header({ variant: "item" })}>
             <NextLink href="/">
-              <a className={header({ variant: "link" })}>Men</a>
+              <a
+                onClick={() => setLinkText("Men")}
+                className={header({
+                  variant: `${linkText == "Men" ? "itemAnimation" : "link"}`,
+                })}
+              >
+                Men
+              </a>
             </NextLink>
           </li>
           <li className={header({ variant: "item" })}>
             <NextLink href="/">
-              <a className={header({ variant: "link" })}>Kids</a>
+              <a
+                onClick={() => setLinkText("Kids")}
+                className={header({
+                  variant: `${linkText == "Kids" ? "itemAnimation" : "link"}`,
+                })}
+              >
+                Kids
+              </a>
             </NextLink>
           </li>
         </ul>
