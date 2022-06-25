@@ -4,6 +4,7 @@
   gallery: string[];
   description: string;
   category: string;
+  prices: Prices[];
 }
 
 export interface Products {
@@ -12,4 +13,9 @@ export interface Products {
 
 export interface Category {
   category: Products[];
+}
+
+export interface Prices {
+  amount: number;
+  currency: string;
 }
