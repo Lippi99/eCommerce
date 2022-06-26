@@ -27,7 +27,7 @@ const Home = ({ products }: any) => {
           {products?.category?.products?.map((product: Product) => {
             return (
               <NextLink href={`/product/${product.id}`} key={product.id}>
-                <a>
+                <a style={{ textDecoration: "none" }}>
                   <Card
                     alt={product.name}
                     key={product.id}
