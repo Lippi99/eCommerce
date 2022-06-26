@@ -19,13 +19,22 @@ const Home = ({ products }: any) => {
     color: "$darkGray",
   });
 
+  const outStock = css({
+    fontWeight: 400,
+    fontFamily: `Raleway,sans-serif`,
+    fontSize: "$8",
+    color: "$lightGray",
+    textTransform: "uppercase",
+    opacity: 1,
+  });
+
   return (
     <Box>
       <Section css={{ paddingLeft: "$8", paddingRight: "$8" }}>
         <h1 className={title()}>Category name</h1>
         <Grid columns={3} gap={4}>
           {products?.category?.products?.map((product: Product) => {
-            return (
+            return product.inStock ? (
               <NextLink href={`/product/${product.id}`} key={product.id}>
                 <a style={{ textDecoration: "none" }}>
                   <Card
@@ -37,6 +46,35 @@ const Home = ({ products }: any) => {
                   />
                 </a>
               </NextLink>
+            ) : (
+              <Box
+                css={{
+                  background: "white",
+                  opacity: 0.5,
+                  position: "relative",
+                }}
+              >
+                <Box
+                  css={{
+                    width: "100%",
+                    height: "100%",
+                    position: "absolute",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 999,
+                  }}
+                >
+                  <h1 className={outStock()}>Out of Stock</h1>
+                </Box>
+                <Card
+                  alt={product.name}
+                  key={product.id}
+                  src={product.gallery[0]}
+                  title={product.name}
+                  prices={product.prices}
+                />
+              </Box>
             );
           })}
         </Grid>
@@ -57,6 +95,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
             name
             gallery
             description
+            inStock
             category
             prices {
               amount

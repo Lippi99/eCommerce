@@ -4,6 +4,7 @@
   gallery: string[];
   description: string;
   category: string;
+  inStock: boolean;
   prices: Prices[];
 }
 
