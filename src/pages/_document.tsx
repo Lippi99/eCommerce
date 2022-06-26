@@ -12,6 +12,12 @@ export default class Document extends NextDocument {
           href="https://fonts.googleapis.com/css2?family=Raleway&display=swap"
           rel="stylesheet"
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap"
+          rel="stylesheet"
+        ></link>
         <Head>
           <style
             id="stitches"

@@ -8,6 +8,7 @@ import { Grid } from "../components/Grid/Grid";
 import { Header } from "../components/Header";
 import { Section } from "../components/Section";
 import { Product, Category } from "../types";
+import NextLink from "next/link";
 
 const Home = ({ products }: any) => {
   const title = css({
@@ -20,20 +21,22 @@ const Home = ({ products }: any) => {
 
   return (
     <Box>
-      <Header />
-
       <Section css={{ paddingLeft: "$8", paddingRight: "$8" }}>
         <h1 className={title()}>Category name</h1>
         <Grid columns={3} gap={4}>
           {products?.category?.products?.map((product: Product) => {
             return (
-              <Card
-                alt={product.name}
-                key={product.id}
-                src={product.gallery[0]}
-                title={product.name}
-                prices={product.prices}
-              />
+              <NextLink href={`/product/${product.id}`} key={product.id}>
+                <a>
+                  <Card
+                    alt={product.name}
+                    key={product.id}
+                    src={product.gallery[0]}
+                    title={product.name}
+                    prices={product.prices}
+                  />
+                </a>
+              </NextLink>
             );
           })}
         </Grid>

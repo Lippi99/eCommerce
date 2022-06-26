@@ -26,7 +26,7 @@ export const Header = () => {
         itemAnimation: {
           color: "$lightGreen",
           paddingBottom: "$2",
-          borderBottom: "1px solid $lightGreen",
+          borderBottom: "2px solid $lightGreen",
           textDecoration: "none",
           fontSize: "$3",
           textTransform: "uppercase",
