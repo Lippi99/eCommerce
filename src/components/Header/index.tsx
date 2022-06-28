@@ -4,8 +4,25 @@ import NextLink from "next/link";
 import NextImage from "next/image";
 import { css } from "../../../stitches.config";
 import { useState } from "react";
+import { gql, useQuery } from "@apollo/client";
+import { currencyFormat } from "../../utils";
+
+const CURRENCY_QUERY = gql`
+  query {
+    currencies
+  }
+`;
+
+interface CurrenciesProps {
+  currencies: string[];
+}
 
 export const Header = () => {
+  const [linkText, setLinkText] = useState("Women");
+  const [currencyDropdown, setCurrencyDropdown] = useState(false);
+
+  const { data: currencies } = useQuery<CurrenciesProps>(CURRENCY_QUERY);
+
   const header = css({
     variants: {
       variant: {
@@ -32,11 +49,17 @@ export const Header = () => {
           textTransform: "uppercase",
           transition: "all 500ms",
         },
+        coin: {
+          cursor: "pointer",
+          color: "$darkGray",
+          fontSize: "$3",
+          fontWeight: 500,
+          textTransform: "uppercase",
+          margin: "$2 0",
+        },
       },
     },
   });
-
-  const [linkText, setLinkText] = useState("Women");
 
   return (
     <Flex
@@ -97,14 +120,48 @@ export const Header = () => {
         />
       </Box>
 
-      <Box>
-        <NextImage
-          src="/dollar-icon.svg"
-          width={70}
-          height={30}
-          objectFit="contain"
-          alt="currency"
-        />
+      <Box css={{ position: "relative", outline: 0 }}>
+        <button
+          onClick={() => setCurrencyDropdown((prev) => !prev)}
+          style={{ cursor: "pointer", background: "none", border: "none" }}
+        >
+          <NextImage
+            src="/dollar-icon.svg"
+            width={70}
+            height={30}
+            objectFit="contain"
+            alt="currency"
+          />
+        </button>
+
+        {currencyDropdown && (
+          <Flex
+            direction="column"
+            css={{
+              width: 90,
+              textAlign: "center",
+              position: "absolute",
+              backgroundColor: "transparent",
+              zIndex: 100,
+            }}
+          >
+            {currencies?.currencies.map((currency, index) => (
+              <Box
+                css={{
+                  "&:hover": {
+                    width: "100%",
+                    backgroundColor: "lightgray",
+                  },
+                }}
+                key={index}
+                className={header({ variant: "coin" })}
+              >
+                {currencyFormat(currency)}
+              </Box>
+            ))}
+          </Flex>
+        )}
+
         <NextImage
           src="/empty-cart-icon.svg"
           width={20}

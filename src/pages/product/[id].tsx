@@ -94,13 +94,14 @@ export default function Details({ product }: Product) {
         <Flex direction="column">
           {product.gallery
             .map((gallery) => (
-              <NextImage
-                key={gallery}
-                width={150}
-                height={150}
-                src={gallery}
-                objectFit="contain"
-              />
+              <div key={gallery}>
+                <NextImage
+                  width={150}
+                  height={150}
+                  src={gallery}
+                  objectFit="contain"
+                />
+              </div>
             ))
             .slice(0, 3)}
         </Flex>
