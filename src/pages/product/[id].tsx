@@ -90,7 +90,7 @@ export default function Details({ product }: Product) {
   const description = product.description.replace(/(<([^>]+)>)/gi, "");
   return (
     <Section css={{ paddingLeft: "$8", paddingRight: "$8" }}>
-      <Flex align="start">
+      <Flex css={{ maxWidth: "1150px", width: "100%" }} align="start">
         <Flex direction="column">
           {product.gallery
             .map((gallery) => (
