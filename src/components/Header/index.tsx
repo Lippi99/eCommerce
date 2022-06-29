@@ -3,7 +3,7 @@ import { Flex } from "../Flex";
 import NextLink from "next/link";
 import NextImage from "next/image";
 import { css } from "../../../stitches.config";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { currencyFormat } from "../../utils";
 import { useCurrency } from "../context/currencyContext";
@@ -64,8 +64,6 @@ export const Header = () => {
       },
     },
   });
-
-  console.log(currency);
 
   const handleSelectCurrency = (event: ChangeEvent<any>) => {
     setCurrency(event.currentTarget.value);

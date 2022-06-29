@@ -5,7 +5,6 @@ import { css } from "../../stitches.config";
 import { Box } from "../components/Box";
 import { Card } from "../components/Card";
 import { Grid } from "../components/Grid/Grid";
-import { Header } from "../components/Header";
 import { Section } from "../components/Section";
 import { Product, Category } from "../types";
 import NextLink from "next/link";
