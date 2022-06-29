@@ -3,9 +3,10 @@ import { Flex } from "../Flex";
 import NextLink from "next/link";
 import NextImage from "next/image";
 import { css } from "../../../stitches.config";
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { currencyFormat } from "../../utils";
+import { useCurrency } from "../context/currencyContext";
 
 const CURRENCY_QUERY = gql`
   query {
@@ -22,6 +23,8 @@ export const Header = () => {
   const [currencyDropdown, setCurrencyDropdown] = useState(false);
 
   const { data: currencies } = useQuery<CurrenciesProps>(CURRENCY_QUERY);
+
+  const { currency, setCurrency } = useCurrency();
 
   const header = css({
     variants: {
@@ -56,10 +59,17 @@ export const Header = () => {
           fontWeight: 500,
           textTransform: "uppercase",
           margin: "$2 0",
+          fontFamily: `Raleway,sans-serif`,
         },
       },
     },
   });
+
+  console.log(currency);
+
+  const handleSelectCurrency = (event: ChangeEvent<any>) => {
+    setCurrency(event.currentTarget.value);
+  };
 
   return (
     <Flex
@@ -145,20 +155,32 @@ export const Header = () => {
               zIndex: 100,
             }}
           >
-            {currencies?.currencies.map((currency, index) => (
-              <Box
-                css={{
-                  "&:hover": {
-                    width: "100%",
-                    backgroundColor: "lightgray",
-                  },
-                }}
-                key={index}
-                className={header({ variant: "coin" })}
-              >
-                {currencyFormat(currency)}
-              </Box>
-            ))}
+            {currencies?.currencies.map((coin, index) => {
+              return (
+                <Box
+                  css={{
+                    "&:hover": {
+                      width: "100%",
+                      backgroundColor: "lightgray",
+                    },
+                  }}
+                  key={index}
+                  className={header({ variant: "coin" })}
+                >
+                  <button
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                    onClick={handleSelectCurrency}
+                    value={coin}
+                  >
+                    {currencyFormat(coin)}
+                  </button>
+                </Box>
+              );
+            })}
           </Flex>
         )}
 

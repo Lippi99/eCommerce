@@ -8,6 +8,7 @@ import NextImage from "next/image";
 import { css } from "../../../stitches.config";
 import { useState } from "react";
 import { Button } from "../../components/Button";
+import { useCurrency } from "../../components/context/currencyContext";
 
 interface Product {
   product: {
@@ -86,6 +87,8 @@ export default function Details({ product }: Product) {
       },
     },
   });
+
+  const { currency } = useCurrency();
 
   const description = product.description.replace(/(<([^>]+)>)/gi, "");
   return (
@@ -192,7 +195,18 @@ export default function Details({ product }: Product) {
             >
               Price:
             </h2>
-            <p className={productDetail({ variant: "subTitle" })}>$50.00</p>
+            {product.prices.map((price, index) => {
+              const productValue =
+                currency === price.currency && `${currency} ${price.amount}`;
+              return (
+                <p
+                  key={index}
+                  className={productDetail({ variant: "subTitle" })}
+                >
+                  {productValue}
+                </p>
+              );
+            })}
           </Box>
           <Box css={{ margin: "$4 0" }}>
             <Button variant="addToCart">Add to cart</Button>

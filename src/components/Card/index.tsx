@@ -3,6 +3,7 @@ import NextImage from "next/image";
 import { css } from "../../../stitches.config";
 import { Prices } from "../../types";
 import { Box } from "../Box";
+import { useCurrency } from "../context/currencyContext";
 
 interface CardProps {
   src?: any;
@@ -31,6 +32,8 @@ const text = css({
 });
 
 export const Card = ({ src, alt, title, prices }: CardProps) => {
+  const { currency, setCurrency } = useCurrency();
+
   return (
     <Flex direction="column" align="start">
       <NextImage
@@ -43,10 +46,15 @@ export const Card = ({ src, alt, title, prices }: CardProps) => {
 
       <Box css={{ marginLeft: "$8", marginTop: "$4", lineHeight: "20px" }}>
         <h1 className={text({ variant: "title" })}>{title}</h1>
-        <p className={text({ variant: "price" })}>
-          {prices[0].currency}
-          {prices[0].amount}
-        </p>
+        {prices.map((price, index) => {
+          const productValue =
+            currency === price.currency && `${currency} ${price.amount}`;
+          return (
+            <p key={index} className={text({ variant: "price" })}>
+              {productValue}
+            </p>
+          );
+        })}
       </Box>
     </Flex>
   );
