@@ -18,7 +18,20 @@ interface Product {
     category: string;
     brand: string;
     prices: Price[];
+    attributes: ProductAttributes[];
   };
+}
+
+interface ProductAttributes {
+  id: string;
+  name: string;
+  items: ProductAttributesItems[];
+}
+
+interface ProductAttributesItems {
+  displayValue: string;
+  id: string;
+  value: string;
 }
 
 interface Price {
@@ -91,6 +104,9 @@ export default function Details({ product }: Product) {
   const { currency } = useCurrency();
 
   const description = product.description.replace(/(<([^>]+)>)/gi, "");
+
+  console.log();
+
   return (
     <Section css={{ paddingLeft: "$8", paddingRight: "$8" }}>
       <Flex css={{ maxWidth: "1150px", width: "100%" }} align="start">
@@ -125,67 +141,56 @@ export default function Details({ product }: Product) {
               {product.brand}
             </p>
           </Box>
+          <Flex css={{ marginBottom: "$4" }}>
+            {product.attributes[0]?.items && (
+              <h2 className={productDetail({ variant: "subTitle" })}>
+                {product.attributes[0].name}:
+              </h2>
+            )}
+            {product.attributes[0]?.items
+              ? product.attributes[0].items.map((attribute) => {
+                  return (
+                    <Box
+                      key={attribute.id}
+                      className={productDetail({
+                        variant:
+                          size === attribute.value ? "sizeSelected" : "size",
+                      })}
+                      onClick={() => setSize(attribute.value)}
+                    >
+                      {attribute.value}
+                    </Box>
+                  );
+                })
+              : null}
+          </Flex>
           <Box css={{ marginBottom: "$4" }}>
-            <h2>Size:</h2>
+            {product.attributes[1]?.items && (
+              <h2 className={productDetail({ variant: "subTitle" })}>
+                {" "}
+                {product.attributes[1].name}:
+              </h2>
+            )}
             <Flex>
-              <Box
-                onClick={() => setSize("XS")}
-                className={productDetail({
-                  variant: size === "XS" ? "sizeSelected" : "size",
-                })}
-              >
-                XS
-              </Box>
-              <Box
-                onClick={() => setSize("S")}
-                className={productDetail({
-                  variant: size === "S" ? "sizeSelected" : "size",
-                })}
-              >
-                S
-              </Box>
-              <Box
-                onClick={() => setSize("M")}
-                className={productDetail({
-                  variant: size === "M" ? "sizeSelected" : "size",
-                })}
-              >
-                M
-              </Box>
-              <Box
-                onClick={() => setSize("L")}
-                className={productDetail({
-                  variant: size === "L" ? "sizeSelected" : "size",
-                })}
-              >
-                L
-              </Box>
-            </Flex>
-          </Box>
-          <Box css={{ marginBottom: "$4" }}>
-            <h2 className={productDetail({ variant: "subTitle" })}>Color:</h2>
-            <Flex>
-              <Box
-                onClick={() => setColor("light gray")}
-                className={productDetail({
-                  variant: color === "light gray" ? "colorSelected" : "color",
-                })}
-                css={{ backgroundColor: "$lighestGray" }}
-              />
-              <Box
-                onClick={() => setColor("dark gray")}
-                className={productDetail({
-                  variant: color === "dark gray" ? "colorSelected" : "color",
-                })}
-                css={{ backgroundColor: "$darkGray" }}
-              />
-              <Box
-                onClick={() => setColor("dark green")}
-                className={productDetail({
-                  variant: color === "dark green" ? "colorSelected" : "color",
-                })}
-                css={{ backgroundColor: "$darkGreen" }}
-              />
+              {product.attributes[1]?.items
+                ? product.attributes[1].items.map((attribute) => {
+                    return (
+                      <>
+                        <Box
+                          key={attribute.id}
+                          onClick={() => setColor(attribute.value)}
+                          className={productDetail({
+                            variant:
+                              color === attribute.value
+                                ? "colorSelected"
+                                : "color",
+                          })}
+                          css={{ backgroundColor: "$lighestGray" }}
+                        />
+                      </>
+                    );
+                  })
+                : null}
             </Flex>
           </Box>
           <Box>
@@ -233,6 +238,16 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
           prices {
             currency
             amount
+          }
+          attributes {
+            id
+            name
+            type
+            items {
+              displayValue
+              value
+              id
+            }
           }
         }
       }
