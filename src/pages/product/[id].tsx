@@ -141,7 +141,7 @@ export default function Details({ product }: Product) {
               {product.brand}
             </p>
           </Box>
-          <Flex css={{ marginBottom: "$4" }}>
+          <Flex css={{ marginBottom: "$4" }} align="center">
             {product.attributes[0]?.items && (
               <h2 className={productDetail({ variant: "subTitle" })}>
                 {product.attributes[0].name}:
@@ -173,10 +173,11 @@ export default function Details({ product }: Product) {
             )}
             <Flex>
               {product.attributes[1]?.items
-                ? product.attributes[1].items.map((attribute) => {
+                ? product.attributes[1].items.map((attribute) => {                
                     return (
                       <>
                         <Box
+                         
                           key={attribute.id}
                           onClick={() => setColor(attribute.value)}
                           className={productDetail({
@@ -185,7 +186,7 @@ export default function Details({ product }: Product) {
                                 ? "colorSelected"
                                 : "color",
                           })}
-                          css={{ backgroundColor: "$lighestGray" }}
+                          css={{ backgroundColor: attribute.value }}
                         />
                       </>
                     );
