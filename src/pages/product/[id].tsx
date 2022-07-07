@@ -133,7 +133,11 @@ export default function Details({ product }: Product) {
             objectFit="contain"
           />
         </Box>
-        <Flex css={{ marginLeft: "$9" }} direction="column" align="start">
+        <Flex
+          css={{ width: "50%", marginLeft: "$9" }}
+          direction="column"
+          align="start"
+        >
           <Box css={{ marginBottom: "$4" }}>
             <h1 className={productDetail({ variant: "title" })}>
               {product.name}
