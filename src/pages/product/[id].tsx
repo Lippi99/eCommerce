@@ -9,8 +9,9 @@ import { css } from "../../../stitches.config";
 import { useState } from "react";
 import { Button } from "../../components/Button";
 import { useCurrency } from "../../components/context/currencyContext";
+import { useCart } from "../../components/context/cartContext";
 
-interface Product {
+export interface Product {
   product: {
     name: string;
     gallery: string[];
@@ -42,6 +43,8 @@ interface Price {
 export default function Details({ product }: Product) {
   const [size, setSize] = useState("");
   const [color, setColor] = useState("");
+
+  const { handleAddProductToCart } = useCart();
 
   const productDetail = css({
     variants: {
@@ -104,8 +107,6 @@ export default function Details({ product }: Product) {
   const { currency } = useCurrency();
 
   const description = product.description.replace(/(<([^>]+)>)/gi, "");
-
-  console.log();
 
   return (
     <Section css={{ paddingLeft: "$8", paddingRight: "$8" }}>
@@ -173,11 +174,10 @@ export default function Details({ product }: Product) {
             )}
             <Flex>
               {product.attributes[1]?.items
-                ? product.attributes[1].items.map((attribute) => {                
+                ? product.attributes[1].items.map((attribute) => {
                     return (
                       <>
                         <Box
-                         
                           key={attribute.id}
                           onClick={() => setColor(attribute.value)}
                           className={productDetail({
@@ -215,7 +215,12 @@ export default function Details({ product }: Product) {
             })}
           </Box>
           <Box css={{ margin: "$4 0" }}>
-            <Button variant="addToCart">Add to cart</Button>
+            <Button
+              onClick={() => handleAddProductToCart(product.name)}
+              variant="addToCart"
+            >
+              Add to cart
+            </Button>
           </Box>
           <Box>
             <p>{description}</p>
@@ -254,7 +259,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       }
     `,
     variables: {
-      id: params?.id,
+      id: params && params.id,
     },
   });
 

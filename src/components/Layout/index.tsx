@@ -5,7 +5,7 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-export const Layout = ({ children }: LayoutProps) => {
+export const Layout = ({ children }: LayoutProps, { products }: any) => {
   return (
     <>
       <Header />

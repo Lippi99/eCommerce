@@ -7,6 +7,7 @@ import { ChangeEvent, useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { currencyFormat } from "../../utils";
 import { useCurrency } from "../context/currencyContext";
+import { useCart } from "../context/cartContext";
 
 const CURRENCY_QUERY = gql`
   query {
@@ -21,10 +22,12 @@ interface CurrenciesProps {
 export const Header = () => {
   const [linkText, setLinkText] = useState("Women");
   const [currencyDropdown, setCurrencyDropdown] = useState(false);
+  const [cartDropDown, setCartDropDown] = useState(false);
 
   const { data: currencies } = useQuery<CurrenciesProps>(CURRENCY_QUERY);
 
-  const { currency, setCurrency } = useCurrency();
+  const { setCurrency } = useCurrency();
+  const { productsCart } = useCart();
 
   const header = css({
     variants: {
@@ -153,42 +156,92 @@ export const Header = () => {
               zIndex: 100,
             }}
           >
-            {currencies?.currencies.map((coin, index) => {
-              return (
-                <Box
-                  css={{
-                    "&:hover": {
-                      width: "100%",
-                      backgroundColor: "lightgray",
-                    },
-                  }}
-                  key={index}
-                  className={header({ variant: "coin" })}
-                >
-                  <button
-                    style={{
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
+            {currencies &&
+              currencies.currencies.map((coin, index) => {
+                return (
+                  <Box
+                    css={{
+                      "&:hover": {
+                        width: "100%",
+                        backgroundColor: "lightgray",
+                      },
                     }}
-                    onClick={handleSelectCurrency}
-                    value={coin}
+                    key={index}
+                    className={header({ variant: "coin" })}
                   >
-                    {currencyFormat(coin)}
-                  </button>
-                </Box>
-              );
-            })}
+                    <button
+                      style={{
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                      }}
+                      onClick={handleSelectCurrency}
+                      value={coin}
+                    >
+                      {currencyFormat(coin)}
+                    </button>
+                  </Box>
+                );
+              })}
           </Flex>
         )}
 
-        <NextImage
-          src="/empty-cart-icon.svg"
-          width={20}
-          height={30}
-          objectFit="contain"
-          alt="empty cart"
-        />
+        <button
+          onClick={() => setCartDropDown((prev) => !prev)}
+          style={{
+            cursor: "pointer",
+            background: "none",
+            border: "none",
+          }}
+        >
+          {productsCart.length >= 1 && (
+            <Box
+              css={{
+                position: "absolute",
+                right: -18,
+                top: -5,
+                width: 20,
+                height: 20,
+                borderRadius: "50%",
+                background: "#000000",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: "bold",
+              }}
+            >
+              <span style={{ color: "white" }}>{productsCart.length}</span>
+            </Box>
+          )}
+          <NextImage
+            src="/empty-cart-icon.svg"
+            width={20}
+            height={30}
+            objectFit="contain"
+            alt="empty cart"
+          />
+        </button>
+
+        {cartDropDown && (
+          <Flex
+            direction="column"
+            css={{
+              width: 90,
+              textAlign: "center",
+              position: "absolute",
+              backgroundColor: "transparent",
+              zIndex: 100,
+            }}
+          >
+            {productsCart ? (
+              productsCart.map((product) => {
+                return <Box key={product.id}>{product.id}</Box>;
+              })
+            ) : (
+              <span>vazio</span>
+            )}
+          </Flex>
+        )}
       </Box>
     </Flex>
   );
