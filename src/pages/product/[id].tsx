@@ -16,6 +16,7 @@ export interface Product {
     name: string;
     gallery: string[];
     description: string;
+    inStock: boolean;
     category: string;
     brand: string;
     prices: Price[];
@@ -220,7 +221,10 @@ export default function Details({ product }: Product) {
           </Box>
           <Box css={{ margin: "$4 0" }}>
             <Button
-              onClick={() => handleAddProductToCart(product.name)}
+              onClick={() => {
+                handleAddProductToCart &&
+                  handleAddProductToCart(product.name, product as any);
+              }}
               variant="addToCart"
             >
               Add to cart
@@ -243,6 +247,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
           name
           gallery
           description
+          inStock
           category
           brand
           prices {

@@ -4,10 +4,10 @@ import { createContext } from "react";
 interface CartContext {
   id?: string;
   total?: number;
-  productsCart: Array<any>;
+  productsCart?: Array<any>;
   setProductsCart?: () => void;
-  handleAddProductToCart: (id: string) => void;
-  handleRemoveProductToCart: (id: string) => void;
+  handleAddProductToCart?: (id: string, products: any) => void;
+  handleRemoveProductToCart?: (id: string) => void;
 }
 
 interface ChildrenProps {
@@ -17,9 +17,9 @@ interface ChildrenProps {
 const CartContext = createContext<CartContext>({} as CartContext);
 
 export const CartProvider = ({ children }: ChildrenProps) => {
-  const [productsCart, setProductsCart] = useState<CartContext[]>("" as any);
+  const [productsCart, setProductsCart] = useState<CartContext[]>([]);
 
-  const handleAddProductToCart = (id: string) => {
+  const handleAddProductToCart = (id: string, products: any) => {
     const copyProductsCart = [...productsCart];
 
     const item = copyProductsCart.find((product) => {
@@ -27,12 +27,11 @@ export const CartProvider = ({ children }: ChildrenProps) => {
     });
 
     if (!item) {
-      copyProductsCart.push({ id: id, total: 1 } as any);
+      copyProductsCart.push({ id: id, total: 1, ...products });
     } else {
-      item.total! + 1;
+      item.total = item.total && item.total + 1;
     }
     setProductsCart(copyProductsCart);
-    console.log(productsCart);
   };
 
   const handleRemoveProductToCart = (id: string) => {
@@ -40,8 +39,8 @@ export const CartProvider = ({ children }: ChildrenProps) => {
     const item = copyProductsCart.find((product) => product.id === id);
 
     if (item) {
-      if (item.total! > 1) {
-        item.total = item.total! - 1;
+      if (item.total && item.total > 1) {
+        item.total = item.total - 1;
         setProductsCart(copyProductsCart);
       }
     } else {

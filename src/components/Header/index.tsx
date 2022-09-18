@@ -194,7 +194,7 @@ export const Header = () => {
             border: "none",
           }}
         >
-          {productsCart.length >= 1 && (
+          {productsCart && productsCart.length >= 1 && (
             <Box
               css={{
                 position: "absolute",
