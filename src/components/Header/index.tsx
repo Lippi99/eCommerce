@@ -28,6 +28,7 @@ export const Header = () => {
 
   const { setCurrency } = useCurrency();
   const { productsCart } = useCart();
+  console.log(productsCart);
 
   const header = css({
     variants: {

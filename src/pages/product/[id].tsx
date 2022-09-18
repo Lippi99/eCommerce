@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Button } from "../../components/Button";
 import { useCurrency } from "../../components/context/currencyContext";
 import { useCart } from "../../components/context/cartContext";
+import { useProductDetails } from "../../components/context/productDetailsContext";
 
 export interface Product {
   product: {
@@ -42,8 +43,7 @@ interface Price {
 }
 
 export default function Details({ product }: Product) {
-  const [size, setSize] = useState("");
-  const [color, setColor] = useState("");
+  const { size, setSize, color, setColor } = useProductDetails();
 
   const { handleAddProductToCart } = useCart();
 
@@ -273,6 +273,15 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   });
 
   const product = data.product;
+
+  if (!product.inStock) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {

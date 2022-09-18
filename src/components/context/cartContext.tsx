@@ -1,5 +1,7 @@
 import { ReactNode, useContext, useState } from "react";
 import { createContext } from "react";
+import { useCurrency } from "./currencyContext";
+import { useProductDetails } from "./productDetailsContext";
 
 interface CartContext {
   id?: string;
@@ -18,6 +20,8 @@ const CartContext = createContext<CartContext>({} as CartContext);
 
 export const CartProvider = ({ children }: ChildrenProps) => {
   const [productsCart, setProductsCart] = useState<CartContext[]>([]);
+  const { currency } = useCurrency();
+  const { size, color } = useProductDetails();
 
   const handleAddProductToCart = (id: string, products: any) => {
     const copyProductsCart = [...productsCart];
@@ -27,7 +31,14 @@ export const CartProvider = ({ children }: ChildrenProps) => {
     });
 
     if (!item) {
-      copyProductsCart.push({ id: id, total: 1, ...products });
+      copyProductsCart.push({
+        id: id,
+        total: 1,
+        ...products,
+        currency,
+        size,
+        color,
+      });
     } else {
       item.total = item.total && item.total + 1;
     }

@@ -32,7 +32,7 @@ const text = css({
 });
 
 export const Card = ({ src, alt, title, prices }: CardProps) => {
-  const { currency, setCurrency } = useCurrency();
+  const { currency } = useCurrency();
 
   return (
     <Flex direction="column" align="start">
