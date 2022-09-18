@@ -28,7 +28,6 @@ export const Header = () => {
 
   const { setCurrency } = useCurrency();
   const { productsCart } = useCart();
-  console.log(productsCart);
 
   const header = css({
     variants: {
@@ -230,13 +229,18 @@ export const Header = () => {
               width: 90,
               textAlign: "center",
               position: "absolute",
-              backgroundColor: "transparent",
+              backgroundColor: "red",
               zIndex: 100,
             }}
           >
             {productsCart ? (
               productsCart.map((product) => {
-                return <Box key={product.id}>{product.id}</Box>;
+                return (
+                  <Box key={product.id}>
+                    MyBag: {productsCart.length} Items
+                    <Box>{product.id}</Box>
+                  </Box>
+                );
               })
             ) : (
               <span>vazio</span>

@@ -31,7 +31,18 @@ const Home = ({ products }: any) => {
     <Box>
       <Section css={{ paddingLeft: "$8", paddingRight: "$8" }}>
         <h1 className={title()}>Category name</h1>
-        <Grid columns={3} gap={4}>
+        <Grid
+          css={{
+            "@bp3": {
+              gridTemplateColumns: "repeat(2, 1fr)",
+            },
+            "@bp1": {
+              gridTemplateColumns: "repeat(1, 1fr)",
+            },
+          }}
+          columns={3}
+          gap={4}
+        >
           {products?.category?.products?.map((product: Product) => {
             return product.inStock ? (
               <NextLink href={`/product/${product.id}`} key={product.id}>
