@@ -1,3 +1,4 @@
+import React from "react";
 import { gql } from "@apollo/client";
 import { GetServerSideProps } from "next";
 import { client } from "../../../apollo-client";
@@ -6,11 +7,13 @@ import { Flex } from "../../components/Flex";
 import { Section } from "../../components/Section";
 import NextImage from "next/image";
 import { css } from "../../../stitches.config";
-import { useState } from "react";
 import { Button } from "../../components/Button";
 import { useCurrency } from "../../components/context/currencyContext";
 import { useCart } from "../../components/context/cartContext";
 import { useProductDetails } from "../../components/context/productDetailsContext";
+import NextHead from "next/head";
+import { ProductSize } from "../../components/ProductSize";
+import { ProductColor } from "../../components/ProductColor";
 
 export interface Product {
   product: {
@@ -110,132 +113,151 @@ export default function Details({ product }: Product) {
   const description = product.description.replace(/(<([^>]+)>)/gi, "");
 
   return (
-    <Section css={{ paddingLeft: "$8", paddingRight: "$8" }}>
-      <Flex css={{ maxWidth: "1150px", width: "100%" }} align="start">
-        <Flex direction="column">
-          {product.gallery
-            .map((gallery) => (
-              <div key={gallery}>
-                <NextImage
-                  width={150}
-                  height={150}
-                  src={gallery}
-                  objectFit="contain"
-                />
-              </div>
-            ))
-            .slice(0, 3)}
-        </Flex>
-        <Box>
-          <NextImage
-            width={400}
-            height={500}
-            src={product.gallery[0]}
-            objectFit="contain"
-          />
-        </Box>
+    <>
+      <NextHead>
+        <title>{product.name}</title>
+        <meta
+          property="og:title"
+          content={product.category}
+          key={product.category}
+        />
+      </NextHead>
+      <Section css={{ paddingLeft: "$8", paddingRight: "$8" }}>
         <Flex
-          css={{ width: "50%", marginLeft: "$9" }}
-          direction="column"
+          css={{
+            maxWidth: "1150px",
+            width: "100%",
+            "@bp2": {
+              flexDirection: "column",
+              alignItems: "center",
+            },
+          }}
           align="start"
         >
-          <Box css={{ marginBottom: "$4" }}>
-            <h1 className={productDetail({ variant: "title" })}>
-              {product.name}
-            </h1>
-            <p className={productDetail({ variant: "description" })}>
-              {product.brand}
-            </p>
-          </Box>
-          <Flex css={{ marginBottom: "$4" }} align="center">
-            {product.attributes[0]?.items && (
-              <h2 className={productDetail({ variant: "subTitle" })}>
-                {product.attributes[0].name}:
-              </h2>
-            )}
-            {product.attributes[0]?.items
-              ? product.attributes[0].items.map((attribute) => {
-                  return (
-                    <Box
-                      key={attribute.id}
-                      className={productDetail({
-                        variant:
-                          size === attribute.value ? "sizeSelected" : "size",
-                      })}
-                      onClick={() => setSize(attribute.value)}
-                    >
-                      {attribute.value}
-                    </Box>
-                  );
-                })
-              : null}
+          <Flex
+            direction="column"
+            css={{
+              "@bp2": {
+                display: "none",
+              },
+            }}
+          >
+            {product.gallery
+              .map((gallery) => (
+                <React.Fragment key={gallery}>
+                  <NextImage
+                    width={150}
+                    height={150}
+                    src={gallery}
+                    objectFit="contain"
+                  />
+                </React.Fragment>
+              ))
+              .slice(0, 3)}
           </Flex>
-          <Box css={{ marginBottom: "$4" }}>
-            {product.attributes[1]?.items && (
-              <h2 className={productDetail({ variant: "subTitle" })}>
-                {" "}
-                {product.attributes[1].name}:
-              </h2>
-            )}
-            <Flex>
-              {product.attributes[1]?.items
-                ? product.attributes[1].items.map((attribute) => {
+          <Box>
+            <NextImage
+              width={400}
+              height={500}
+              src={product.gallery[0]}
+              objectFit="contain"
+            />
+          </Box>
+          <Flex
+            css={{
+              width: "50%",
+              marginLeft: "$9",
+              "@bp2": {
+                width: "100%",
+                margin: 0,
+                alignItems: "center",
+              },
+            }}
+            direction="column"
+            align="start"
+          >
+            <Box css={{ marginBottom: "$4" }}>
+              <h1 className={productDetail({ variant: "title" })}>
+                {product.name}
+              </h1>
+              <p className={productDetail({ variant: "description" })}>
+                {product.brand}
+              </p>
+            </Box>
+            <Flex css={{ marginBottom: "$4" }} align="center">
+              {product.attributes[0]?.items && (
+                <h2 className={productDetail({ variant: "subTitle" })}>
+                  {product.attributes[0].name}:
+                </h2>
+              )}
+              {product.attributes[0]?.items
+                ? product.attributes[0].items.map((attribute) => {
                     return (
-                      <>
-                        <Box
-                          key={attribute.id}
-                          onClick={() => setColor(attribute.value)}
-                          className={productDetail({
-                            variant:
-                              color === attribute.value
-                                ? "colorSelected"
-                                : "color",
-                          })}
-                          css={{ backgroundColor: attribute.value }}
-                        />
-                      </>
+                      <ProductSize key={attribute.id} value={attribute.value} />
                     );
                   })
                 : null}
             </Flex>
-          </Box>
-          <Box>
-            <h2
-              style={{ marginBottom: "10px" }}
-              className={productDetail({ variant: "subTitle" })}
-            >
-              Price:
-            </h2>
-            {product.prices.map((price, index) => {
-              const productValue =
-                currency === price.currency && `${currency} ${price.amount}`;
-              return (
-                <p
-                  key={index}
-                  className={productDetail({ variant: "subTitle" })}
-                >
-                  {productValue}
-                </p>
-              );
-            })}
-          </Box>
-          <Box css={{ margin: "$4 0" }}>
-            <Button
-              onClick={() => {
-                handleAddProductToCart &&
-                  handleAddProductToCart(product.name, product as any);
-              }}
-              variant="addToCart"
-            >
-              Add to cart
-            </Button>
-          </Box>
-          <Box>
-            <p>{description}</p>
-          </Box>
+            <Box css={{ marginBottom: "$4" }}>
+              {product.attributes[1]?.items && (
+                <h2 className={productDetail({ variant: "subTitle" })}>
+                  {product.attributes[1].name}:
+                </h2>
+              )}
+              <Flex>
+                {product.attributes[1]?.items
+                  ? product.attributes[1].items.map((attribute) => {
+                      return (
+                        <ProductColor
+                          key={attribute.id}
+                          value={attribute.value}
+                          id={attribute.id}
+                        />
+                      );
+                    })
+                  : null}
+              </Flex>
+            </Box>
+            <Box>
+              <h2
+                style={{ marginBottom: "10px" }}
+                className={productDetail({ variant: "subTitle" })}
+              >
+                Price:
+              </h2>
+              {product.prices.map((price, index) => {
+                const productValue =
+                  currency === price.currency && `${currency} ${price.amount}`;
+                return (
+                  <p
+                    key={index}
+                    className={productDetail({ variant: "subTitle" })}
+                  >
+                    {productValue}
+                  </p>
+                );
+              })}
+            </Box>
+            <Box css={{ margin: "$4 0" }}>
+              <Button
+                onClick={() => {
+                  size != "" || color != ""
+                    ? handleAddProductToCart &&
+                      handleAddProductToCart(product.name, product as any)
+                    : null;
+                }}
+                variant={size != "" || color != "" ? "addToCart" : "fillProps"}
+              >
+                Add to cart
+              </Button>
+            </Box>
+            <Box>
+              <p>{description}</p>
+            </Box>
+          </Flex>
         </Flex>
-      </Flex>
-    </Section>
+      </Section>
+    </>
   );
 }
 

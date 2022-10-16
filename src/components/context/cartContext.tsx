@@ -3,13 +3,48 @@ import { createContext } from "react";
 import { useCurrency } from "./currencyContext";
 import { useProductDetails } from "./productDetailsContext";
 
+export interface Product {
+  id: string;
+  name: string;
+  gallery: string[];
+  description: string;
+  currency: string;
+  color: string;
+  size: string;
+  inStock: boolean;
+  category: string;
+  brand: string;
+  prices: Price[];
+  attributes: ProductAttributes[];
+}
+
+interface ProductAttributes {
+  id: string;
+  name: string;
+  items: ProductAttributesItems[];
+}
+
+interface ProductAttributesItems {
+  displayValue: string;
+  id: string;
+  value: string;
+}
+
+interface Price {
+  currency?: string;
+  amount?: number;
+}
 interface CartContext {
   id?: string;
   total?: number;
-  productsCart?: Array<any>;
+  prices?: Price[];
+  currency: string;
+  productsCart: Product[];
   setProductsCart?: () => void;
   handleAddProductToCart?: (id: string, products: any) => void;
   handleRemoveProductToCart?: (id: string) => void;
+  cartDropDown: boolean;
+  setCartDropDown: (value: any) => void;
 }
 
 interface ChildrenProps {
@@ -22,6 +57,7 @@ export const CartProvider = ({ children }: ChildrenProps) => {
   const [productsCart, setProductsCart] = useState<CartContext[]>([]);
   const { currency } = useCurrency();
   const { size, color } = useProductDetails();
+  const [cartDropDown, setCartDropDown] = useState(false);
 
   const handleAddProductToCart = (id: string, products: any) => {
     const copyProductsCart = [...productsCart];
@@ -64,11 +100,15 @@ export const CartProvider = ({ children }: ChildrenProps) => {
 
   return (
     <CartContext.Provider
-      value={{
-        productsCart,
-        handleAddProductToCart,
-        handleRemoveProductToCart,
-      }}
+      value={
+        {
+          productsCart,
+          handleAddProductToCart,
+          handleRemoveProductToCart,
+          setCartDropDown,
+          cartDropDown,
+        } as any
+      }
     >
       {children}
     </CartContext.Provider>

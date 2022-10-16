@@ -18,3 +18,22 @@ const currencyFormat = (currency: string) => {
 };
 
 export default currencyFormat;
+
+export const currencySign = (currency: string) => {
+  if (currency === "USD") {
+    return `$`;
+  }
+  if (currency === "GBP") {
+    return `£`;
+  }
+
+  if (currency === "AUD") {
+    return `A$`;
+  }
+  if (currency === "JPY") {
+    return `¥`;
+  }
+  if (currency === "RUB") {
+    return `₽`;
+  }
+};
