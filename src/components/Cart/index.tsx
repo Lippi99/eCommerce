@@ -1,24 +1,34 @@
 import { Box } from "../Box";
-import { useCart } from "../context/cartContext";
+import { Product, useCart } from "../context/cartContext";
 import { Flex } from "../Flex";
 import NextImage from "next/image";
 import { currencySign } from "../../utils/currency";
+import { Button } from "../Button";
 
 export const Cart = () => {
-  const { productsCart } = useCart();
+  const { productsCart, handleAddProductToCart, handleRemoveProductToCart } =
+    useCart();
 
   let total = 0;
   let currency = "";
+  console.log(productsCart);
 
-  productsCart.forEach((value) => {
-    const amount = value.prices.filter(
-      (price) => price.currency === value.currency
-    );
-    for (let i = 0; i < amount.length; i++) {
-      total += amount[i].amount!;
-      currency = currencySign(value.currency)!;
-    }
-  });
+  if (Array.isArray(productsCart)) {
+    productsCart.forEach((value) => {
+      const amount = value.prices.filter(
+        (price) => price.currency === value.currency
+      );
+      for (let i = 0; i < amount.length; i++) {
+        const totalCartProducts = amount[i].amount! * value.total!;
+        total += totalCartProducts;
+        currency = currencySign(value.currency)!;
+      }
+    });
+  }
+
+  const handleIncrementProduct = (product: Product) => {
+    handleAddProductToCart && handleAddProductToCart(product);
+  };
 
   return (
     <Flex
@@ -50,22 +60,26 @@ export const Cart = () => {
               : `${productsCart && productsCart.length} Item`}
           </span>
         </Box>
-        {productsCart ? (
+        {Array.isArray(productsCart) ? (
           productsCart.map((product) => {
-            const amount = product.prices.filter(
-              (price) => price.currency === product.currency
-            );
-
             return (
               <>
                 <Flex justify="between" key={product.id}>
-                  <Box>
-                    <p style={{ marginBottom: "1rem" }}>{product.id}</p>
+                  <Box css={{ width: "50%", position: "relative" }}>
+                    <Flex css={{ width: "100%" }} justify="between">
+                      <p style={{ marginBottom: "1rem" }}>{product.name}</p>
+                      <Button
+                        variant="increment"
+                        onClick={() => handleIncrementProduct(product)}
+                      >
+                        +
+                      </Button>
+                    </Flex>
                     <p style={{ marginBottom: "1rem", fontWeight: 1000 }}>
-                      {currencySign(product.currency)} {amount[0].amount}
+                      {currencySign(product.currency)} {product.amount}
                     </p>
-                    {product.size.includes("T") ||
-                    product.size.includes("G") ? (
+                    {product.size?.includes("T") ||
+                    product.size?.includes("G") ? (
                       <>
                         <p>Capacity:</p>
                         <Box
@@ -127,7 +141,16 @@ export const Cart = () => {
                         />
                       </>
                     ) : null}
-                    {/* <ProductSize value={product.size} /> */}
+                    <Button
+                      css={{ position: "absolute", right: 0, bottom: 0 }}
+                      variant="decrement"
+                      onClick={() =>
+                        handleRemoveProductToCart &&
+                        handleRemoveProductToCart(product.name)
+                      }
+                    >
+                      -
+                    </Button>
                   </Box>
                   <Box>
                     <NextImage

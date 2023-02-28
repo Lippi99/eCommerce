@@ -1,11 +1,16 @@
- export interface Product {
-  id:  string;
+export interface Product {
+  id: string;
   name: string;
+  total: number;
+  amount: number;
   gallery: string[];
   description: string;
   category: string;
   inStock: boolean;
   prices: Prices[];
+  size: string;
+  color: string;
+  currency: string;
 }
 
 export interface Products {

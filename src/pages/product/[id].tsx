@@ -243,7 +243,7 @@ export default function Details({ product }: Product) {
                 onClick={() => {
                   size != "" || color != ""
                     ? handleAddProductToCart &&
-                      handleAddProductToCart(product.name, product as any)
+                      handleAddProductToCart(product as any)
                     : null;
                 }}
                 variant={size != "" || color != "" ? "addToCart" : "fillProps"}

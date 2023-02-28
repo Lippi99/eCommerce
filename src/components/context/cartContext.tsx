@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import { createContext } from "react";
 import { useCurrency } from "./currencyContext";
 import { useProductDetails } from "./productDetailsContext";
@@ -13,6 +13,8 @@ export interface Product {
   size: string;
   inStock: boolean;
   category: string;
+  amount: number;
+  total?: number;
   brand: string;
   prices: Price[];
   attributes: ProductAttributes[];
@@ -36,15 +38,19 @@ interface Price {
 }
 interface CartContext {
   id?: string;
-  total?: number;
-  prices?: Price[];
+  name: string;
+  total: number;
+  size: string;
+  color: string;
+  prices: Price[];
   currency: string;
-  productsCart: Product[];
-  setProductsCart?: () => void;
-  handleAddProductToCart?: (id: string, products: any) => void;
+  productsCart?: Product[];
+  amount: number;
+  setProductsCart?: (product: CartContext) => void;
+  handleAddProductToCart?: (products: any) => void;
   handleRemoveProductToCart?: (id: string) => void;
-  cartDropDown: boolean;
-  setCartDropDown: (value: any) => void;
+  cartDropDown?: boolean;
+  setCartDropDown?: (value: any) => void;
 }
 
 interface ChildrenProps {
@@ -56,44 +62,49 @@ const CartContext = createContext<CartContext>({} as CartContext);
 export const CartProvider = ({ children }: ChildrenProps) => {
   const [productsCart, setProductsCart] = useState<CartContext[]>([]);
   const { currency } = useCurrency();
-  const { size, color } = useProductDetails();
+  let { size, color, setColor, setSize } = useProductDetails();
   const [cartDropDown, setCartDropDown] = useState(false);
 
-  const handleAddProductToCart = (id: string, products: any) => {
+  const handleAddProductToCart = (product: Product) => {
     const copyProductsCart = [...productsCart];
-
-    const item = copyProductsCart.find((product) => {
-      return product.id === id;
+    const item = copyProductsCart.find((item) => {
+      return item.name === product.name;
     });
 
+    const matchingCurrency = product.prices.find((price) => {
+      return price.currency === currency;
+    });
+
+    const amount = matchingCurrency?.amount;
     if (!item) {
+      setColor("");
+      setSize("");
       copyProductsCart.push({
-        id: id,
         total: 1,
-        ...products,
+        ...product,
         currency,
         size,
         color,
+        amount: amount!,
       });
     } else {
-      item.total = item.total && item.total + 1;
+      item.total! += 1;
     }
     setProductsCart(copyProductsCart);
   };
 
   const handleRemoveProductToCart = (id: string) => {
     const copyProductsCart = [...productsCart];
-    const item = copyProductsCart.find((product) => product.id === id);
+    const item = copyProductsCart.find((product) => product.name === id);
 
-    if (item) {
-      if (item.total && item.total > 1) {
-        item.total = item.total - 1;
-        setProductsCart(copyProductsCart);
-      }
+    if (item && item.total > 1) {
+      item.total -= 1;
+      setProductsCart(copyProductsCart);
     } else {
       const productListFiltered = copyProductsCart.filter(
-        (product) => product.id !== id
+        (product) => product.name !== id
       );
+
       setProductsCart(productListFiltered);
     }
   };
@@ -105,6 +116,7 @@ export const CartProvider = ({ children }: ChildrenProps) => {
           productsCart,
           handleAddProductToCart,
           handleRemoveProductToCart,
+          setProductsCart,
           setCartDropDown,
           cartDropDown,
         } as any
