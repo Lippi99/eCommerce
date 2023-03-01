@@ -11,7 +11,6 @@ export const Cart = () => {
 
   let total = 0;
   let currency = "";
-  console.log(productsCart);
 
   if (Array.isArray(productsCart)) {
     productsCart.forEach((value) => {
@@ -64,7 +63,11 @@ export const Cart = () => {
           productsCart.map((product) => {
             return (
               <>
-                <Flex justify="between" key={product.id}>
+                <Flex
+                  css={{ margin: "$6 0" }}
+                  justify="between"
+                  key={product.id}
+                >
                   <Box css={{ width: "50%", position: "relative" }}>
                     <Flex css={{ width: "100%" }} justify="between">
                       <p style={{ marginBottom: "1rem" }}>{product.name}</p>

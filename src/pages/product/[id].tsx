@@ -241,12 +241,16 @@ export default function Details({ product }: Product) {
             <Box css={{ margin: "$4 0" }}>
               <Button
                 onClick={() => {
-                  size != "" || color != ""
+                  size !== "" || color !== "" || product.attributes.length == 0
                     ? handleAddProductToCart &&
                       handleAddProductToCart(product as any)
                     : null;
                 }}
-                variant={size != "" || color != "" ? "addToCart" : "fillProps"}
+                variant={
+                  size !== "" || color !== "" || product.attributes.length == 0
+                    ? "addToCart"
+                    : "fillProps"
+                }
               >
                 Add to cart
               </Button>
