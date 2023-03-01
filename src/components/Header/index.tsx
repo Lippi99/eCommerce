@@ -127,7 +127,9 @@ export const Header = () => {
           {currencyDropdown && <CurrencyDropdown />}
 
           <button
-            onClick={() => setCartDropDown((prev: boolean) => !prev)}
+            onClick={() =>
+              setCartDropDown && setCartDropDown((prev: boolean) => !prev)
+            }
             style={{
               cursor: "pointer",
               background: "none",
