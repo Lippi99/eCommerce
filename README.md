@@ -1,34 +1,54 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+![ecommerce](https://github.com/Lippi99/eCommerce/assets/65247407/ea0acf8e-0192-437c-aaf4-47343ac93b82)
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
+![image](https://github.com/Lippi99/clinic-appointment-front/assets/65247407/70e265a1-ca85-4678-a059-7e9826550229)
+
+# How to run the project?
+```
+1 - Open your terminal
+2 - yarn
+3 - yarn dev
+```
+# What's the project about?
+It's a really simplified store where you can add products to your cart and choose the currency you want to buy.
+
+# What are the stacks being used?
+### For front-end
+```
+1 - Next 12
+2 - StitchesJS
+3 - Axios
+4 - Apollo Client
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### For backend
+```
+1 - GraphQL endpoints mocked data
+```
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+![image](https://github.com/Lippi99/clinic-appointment-front/assets/65247407/35716166-6c9d-4808-8792-cf6074fce0f7)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+# Como rodar o projeto?
+```
+1 - Open your terminal
+2 - yarn
+3 - yarn dev
+```
+# Sobre o que é o projeto?
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+É uma loja bem simplificada onde você pode adicionar produtos ao carrinho e escolher a moeda que deseja comprar.
 
-## Learn More
+# Quais tecnologias estão sendo utilizadas?
+### front-end
+```
+1 - Next 12
+2 - StitchesJS
+3 - Axios
+4 - Apollo Client
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### For backend
+```
+1 - GraphQL endpoints mocked data
+```
